@@ -1,0 +1,87 @@
+
+
+## 📄 Schemas Content (`schemas/`)
+
+### 1\. `schemas/CostAnomalyChecker-openapi.yaml` (Tool 1)
+
+This schema defines the function to query the DynamoDB table, requiring the `anomaly_id` as input.
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Cost Anomaly Checker API
+  version: '1.0'
+  description: API to retrieve structured data about a cost anomaly from the database.
+paths:
+  /getAnomalyDetails:
+    post:
+      summary: Retrieves detailed information about a specific cloud cost anomaly from the database.
+      operationId: get_anomaly_details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                anomaly_id:
+                  type: string
+                  description: The unique identifier of the cost anomaly (e.g., 'DB-001' or 'S3-005').
+              required:
+                - anomaly_id
+      responses:
+        '200':
+          description: Cost anomaly details successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resource_arn:
+                    type: string
+                    description: The ARN of the AWS resource causing the anomaly.
+                  anomaly_type:
+                    type: string
+                    description: The service type of the anomaly (e.g., 'DynamoDB-Capacity', 'S3-HighOps').
+                  cost_impact_usd:
+                    type: number
+                    description: The estimated cost impact in USD.
+```
+
+-----
+
+### 2\. `schemas/NovaActExecutor-openapi.yaml` (Tool 2 - Nova Act SDK)
+
+This schema defines the function for executing the advanced, UI-based triage action, requiring the resource ARN and the policy name determined by the RAG step.
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Nova Act SDK Executor for Cloud Triage
+  version: '1.0'
+  description: Advanced tool for applying temporary, restrictive policies via UI automation (Nova Act SDK).
+paths:
+  /applyTriagePolicy:
+    post:
+      summary: Executes the Nova Act SDK to apply a temporary restrictive IAM policy via the AWS Console UI automation for resource triage.
+      operationId: apply_triage_policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resource_arn:
+                  type: string
+                  description: The ARN of the anomalous resource requiring immediate policy triage. This value is derived from the CostAnomalyChecker tool.
+                triage_policy_name:
+                  type: string
+                  description: The specific policy name to apply (e.g., 'Restrict_Write_Access'). This value is derived from the Internal Runbooks (RAG).
+              required:
+                - resource_arn
+                - triage_policy_name
+      responses:
+        '200':
+          description: Triage policy applied successfully via Nova Act SDK automation.
+```
