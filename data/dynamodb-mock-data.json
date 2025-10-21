@@ -1,0 +1,16 @@
+[
+  {
+    "AnomalyID": {"S": "DB-001"},
+    "ResourceARN": {"S": "arn:aws:dynamodb:us-west-2:123456789012:table/HighCostTableA"},
+    "AnomalyType": {"S": "DynamoDB-Capacity"},
+    "CostImpactUSD": {"N": "450.75"},
+    "Description": {"S": "Uncontrolled read capacity spike."}
+  },
+  {
+    "AnomalyID": {"S": "S3-005"},
+    "ResourceARN": {"S": "arn:aws:s3:::customer-data-lake-prod"},
+    "AnomalyType": {"S": "S3-HighOps"},
+    "CostImpactUSD": {"N": "980.50"},
+    "Description": {"S": "High PUT/LIST volume due to client misconfiguration."}
+  }
+]
