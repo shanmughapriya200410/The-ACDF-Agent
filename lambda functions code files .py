@@ -1,8 +1,3 @@
-The next things to add to the GitHub repository, following the comprehensive `README.md`, are the actual **code files** and the **data files** necessary for the project to be functional and deployable.
-
-Here is a plan outlining the content for each file based on the established structure:
-
------
 
 ## 1\. Lambda Function Code Files (`lambda-functions/`)
 
