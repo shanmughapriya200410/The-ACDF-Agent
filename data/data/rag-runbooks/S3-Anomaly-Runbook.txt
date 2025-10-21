@@ -1,0 +1,44 @@
+
+
+### 1\. `S3-Anomaly-Runbook.txt`
+
+```text
+INTERNAL RUNBOOK: S3-HighOps Anomaly Remediation Guidance
+
+Anomaly Type: S3-HighOps (Excessive PUT/LIST requests)
+
+Diagnosis: 
+This type of cost anomaly is frequently caused by unoptimized or runaway client-side applications (e.g., ETL jobs, backups) executing massive numbers of API calls against an S3 bucket.
+
+Severity: HIGH (Immediate action required due to rapid cost acceleration)
+
+Required Triage Plan:
+1. Identify the responsible S3 bucket ARN from the anomaly report.
+2. The Agent MUST determine the necessary policy to restrict damaging write/list operations.
+3. Use the NovaActExecutor (apply_triage_policy) tool to apply the restrictive policy.
+4. The required triage_policy_name for S3-HighOps is: **Restrict_Write_Access** Instructions to Agent: The next step after identifying the S3-HighOps type is to use the NovaActTriageTool with the policy name 'Restrict_Write_Access' and the resource ARN.
+```
+
+-----
+
+### 2\. `DynamoDB-Capacity-Runbook.txt`
+
+```text
+INTERNAL RUNBOOK: DynamoDB-Capacity Anomaly Remediation Guidance
+
+Anomaly Type: DynamoDB-Capacity (Spikes in Provisioned Read/Write Capacity)
+
+Diagnosis: 
+This anomaly indicates either a lack of proper auto-scaling configuration or an unexpected, massive spike in traffic (e.g., sudden load test or malicious activity) forcing aggressive scaling.
+
+Severity: MEDIUM (Needs immediate control, but usually less catastrophic than S3 ops)
+
+Required Triage Plan:
+1. Identify the DynamoDB Table ARN from the anomaly report.
+2. If the table is currently auto-scaling aggressively, a temporary cap is required.
+3. The Agent MUST determine the necessary policy to cap aggressive capacity growth.
+4. Use the NovaActExecutor (apply_triage_policy) tool to apply the capacity-limiting policy.
+5. The required triage_policy_name for DynamoDB-Capacity is: **Limit_Capacity_To_Base**
+
+Instructions to Agent: The next step after identifying the DynamoDB-Capacity type is to use the NovaActTriageTool with the policy name 'Limit_Capacity_To_Base' and the resource ARN.
+```
